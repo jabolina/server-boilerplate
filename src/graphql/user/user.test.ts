@@ -38,6 +38,7 @@ test("Register-user", async () => {
     const happyRegisterResponse = await request(GRAPHQL_HOST, registerUserMutation);
     expect(happyRegisterResponse).toEqual({ register: { success: true, code: 1, error: null } });
 
+    // Insert user with the same email
     const sadRegisterResponse = await request(GRAPHQL_HOST, registerUserMutation);
     expect(sadRegisterResponse).toMatchObject({ register: { success: false, code: 1, error: [{}]}});
 
