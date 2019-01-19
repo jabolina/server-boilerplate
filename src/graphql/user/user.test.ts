@@ -1,7 +1,7 @@
 import { request } from "graphql-request";
 
-import { createDabataseConnection } from "../src/utils/typeorm";
-import { User } from "../src/entity/User";
+import { createDabataseConnection } from "../../utils/typeorm";
+import { User } from "../../entity/User";
 import { Connection } from "typeorm";
 
 const GRAPHQL_HOST = "http://localhost:4000";

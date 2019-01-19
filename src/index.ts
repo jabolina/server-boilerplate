@@ -1,16 +1,14 @@
 import "reflect-metadata";
 
-import { importSchema } from "graphql-import";
 import { GraphQLServer } from "graphql-yoga";
-import { join } from "path";
 
-import { resolvers } from "./graphql/resolvers";
+import { create } from "./graphql";
 import { createDabataseConnection } from "./utils/typeorm";
-
-const typeDefs = importSchema(join(__dirname + "/graphql/schema.graphql"));
+import { GraphQLSchema } from "graphql";
 
 (async () => {
-    const server = new GraphQLServer({ typeDefs, resolvers });
+    const schema: GraphQLSchema = create();
+    const server: GraphQLServer = new GraphQLServer({ schema });
     await createDabataseConnection();
     await server.start();
 
