@@ -1,4 +1,4 @@
-import { GraphQLResolver } from "./types/graphql-utils";
+import { GraphQLResolver } from "../types/graphql-utils";
 
 export const resolvers: GraphQLResolver = {
     Query: {

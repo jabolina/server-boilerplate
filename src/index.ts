@@ -3,9 +3,9 @@ import "reflect-metadata";
 import { importSchema } from "graphql-import";
 import { GraphQLServer } from "graphql-yoga";
 
-import { resolvers } from "./resolvers";
+import { resolvers } from "./graphql/resolvers";
 
-const typeDefs = importSchema("schema.graphql");
+const typeDefs = importSchema("./src/graphql/schema.graphql");
 
 const server = new GraphQLServer({ typeDefs, resolvers });
 server.start(() => {
