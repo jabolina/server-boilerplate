@@ -23,13 +23,23 @@ const closeGlobalDatabaseConnection = async () => {
 test("Register-user", async () => {
     const registerUserMutation = `
         mutation {
-            register(firstName: "${firstName}", email:"${email}", password: "${password}")
+            register(firstName: "${firstName}", email:"${email}", password: "${password}") {
+                success
+                code
+                error {
+                  path
+                  message
+                }
+              }
         }
     `;
 
     // Insert new user in database
-    const registerResponse = await request(GRAPHQL_HOST, registerUserMutation);
-    expect(registerResponse).toEqual({ register: true });
+    const happyRegisterResponse = await request(GRAPHQL_HOST, registerUserMutation);
+    expect(happyRegisterResponse).toEqual({ register: { success: true, code: 1, error: null } });
+
+    const sadRegisterResponse = await request(GRAPHQL_HOST, registerUserMutation);
+    expect(sadRegisterResponse).toMatchObject({ register: { success: false, code: 1, error: [{}]}});
 
     // Query user with email
     const users = await User.find({ where: { email } });
