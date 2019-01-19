@@ -1,0 +1,23 @@
+{
+   "name": "server-boilerplate",
+   "version": "0.0.1",
+   "description": "Awesome project developed with TypeORM.",
+   "devDependencies": {
+      "@types/node": "^10.12.18",
+      "nodemon": "^1.18.9",
+      "ts-node": "7.0.1",
+      "tslint": "^5.12.1",
+      "tslint-config-prettier": "^1.17.0",
+      "typescript": "3.2.4"
+   },
+   "dependencies": {
+      "graphql-yoga": "^1.17.0",
+      "mysql": "^2.16.0",
+      "reflect-metadata": "^0.1.13",
+      "typeorm": "0.2.11"
+   },
+   "scripts": {
+      "start": "ts-node src/index.ts",
+      "dev": "nodemon --exec ts-node src/index.ts"
+   }
+}
