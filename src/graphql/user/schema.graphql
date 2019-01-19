@@ -1,6 +1,15 @@
 type Query {
     bye: String
 }
+type Error {
+    path: String!
+    message: String!
+}
+type RegisterResponse {
+    success: Boolean!
+    error: [Error!]
+    code: Int!
+}
 type Mutation {
-    register(firstName: String!, email: String!, password: String!): Boolean
+    register(firstName: String!, email: String!, password: String!): RegisterResponse!
 }
