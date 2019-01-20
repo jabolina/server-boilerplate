@@ -12,6 +12,7 @@ export const routes = (redis: Redis) => {
 
         if (userId) {
             await User.update({ id: userId }, { confirmed: true });
+            await redis.del(id);
             res.send("ok");
         } else {
             res.send("nop");

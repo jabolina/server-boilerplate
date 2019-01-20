@@ -5,12 +5,12 @@ import { GraphQLServer } from "graphql-yoga";
 import { create } from "./graphql";
 import { createDabataseConnection } from "./utils/typeorm";
 import { GraphQLSchema } from "graphql";
-import * as Redis from "ioredis";
+
 import { routes } from "./routes/user";
 import { Router } from "express";
+import { redis } from "./redis";
 
 (async () => {
-    const redis = new Redis();
     const schema: GraphQLSchema = create();
     const server: GraphQLServer = new GraphQLServer({
         schema,
