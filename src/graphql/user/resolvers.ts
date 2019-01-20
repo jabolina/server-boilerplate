@@ -7,7 +7,7 @@ import { statusMessage } from "../../i18n";
 
 const schema = yup.object().shape({
     firstName: yup.string().min(4).max(30),
-    email: yup.string().min(5).max(255).email(),
+    email: yup.string().max(255).email(),
     password: yup.string().min(5).max(255),
 });
 

@@ -20,7 +20,7 @@ const closeGlobalDatabaseConnection = async () => {
     await conn.close();
 }
 
-test("Register-user", async () => {
+test("register-user-success", async () => {
     const registerUserMutation = `
         mutation {
             register(firstName: "${firstName}", email:"${email}", password: "${password}") {
@@ -38,10 +38,6 @@ test("Register-user", async () => {
     const happyRegisterResponse = await request(GRAPHQL_HOST, registerUserMutation);
     expect(happyRegisterResponse).toEqual({ register: { success: true, code: 1, error: null } });
 
-    // Insert user with the same email
-    const sadRegisterResponse = await request(GRAPHQL_HOST, registerUserMutation);
-    expect(sadRegisterResponse).toMatchObject({ register: { success: false, code: 1, error: [{}]}});
-
     // Query user with email
     const users = await User.find({ where: { email } });
     expect(users).toHaveLength(1);
@@ -52,6 +48,67 @@ test("Register-user", async () => {
     expect(user.firstName).toEqual(firstName);
 });
 
+test("register-user-duplicate-email", async () => {
+    const registerUserMutation = `
+        mutation {
+            register(firstName: "${firstName}", email:"${email}", password: "${password}") {
+                success
+                code
+                error {
+                  path
+                  message
+                }
+              }
+        }
+    `;
+    // Insert user with duplicate email
+    const sadRegisterResponse = await request(GRAPHQL_HOST, registerUserMutation);
+    expect(sadRegisterResponse).toMatchObject({ register: { success: false, code: 1, error: [{}]}});
+});
+
+test("register-malformed-user-email", async () => {
+    const malformedEmail = email.substr(0, 4);
+
+    // Insert malformed email
+    const malformedEmailRegisterMutation = `
+    mutation {
+        register(firstName: "${firstName}", email:"${malformedEmail}", password: "${password}") {
+            success
+            code
+            error {
+              path
+              message
+            }
+          }
+    }`;
+    const malformedEmailRegisterResponse: any = await request(GRAPHQL_HOST, malformedEmailRegisterMutation);
+    expect(malformedEmailRegisterResponse).toMatchObject({ register: { success: false, code: 1, error: [{}]}});
+
+    const { register } = malformedEmailRegisterResponse;
+    expect(register.error).toHaveLength(1);
+});
+
+test("register-malformed-user-password", async () => {
+    const malformedPassword = password.substr(0, 4);
+
+    // Insert malformed email
+    const malformedPasswordRegisterMutation = `
+    mutation {
+        register(firstName: "${firstName}", email:"${email}", password: "${malformedPassword}") {
+            success
+            code
+            error {
+              path
+              message
+            }
+          }
+    }`;
+    const malformedPasswordRegisterResponse: any = await request(GRAPHQL_HOST, malformedPasswordRegisterMutation);
+    expect(malformedPasswordRegisterResponse).toMatchObject({ register: { success: false, code: 1, error: [{}]}});
+
+    const { register } = malformedPasswordRegisterResponse;
+    expect(register.error).toHaveLength(1);
+});
 
 afterAll(async () => {
     await closeGlobalDatabaseConnection();
