@@ -9,6 +9,6 @@ export const statusMessage = (locale: string, code: any, status: boolean) => {
         messages = errorMessage(code);
     }
 
-    messages.filter((o: any) => o.country === locale);
+    messages = messages.filter((o: any) => o.country === locale);
     return messages[0].message;
 }
