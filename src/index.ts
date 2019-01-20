@@ -6,23 +6,8 @@ import { create } from "./graphql";
 import { createDabataseConnection } from "./utils/typeorm";
 import { GraphQLSchema } from "graphql";
 import * as Redis from "ioredis";
-import { Request, Response } from "express";
-import { User } from "./entity/User";
-
-const confirmationRoute = (server: GraphQLServer, redis: Redis.Redis) => {
-    server.express.get("/confirm/:id", async (req: Request, res: Response) => {
-        console.log("Received link confirmation");
-        const { id } = req.params;
-        const userId: string | null = await redis.get(id);
-
-        if (userId) {
-            await User.update({ id: userId }, { confirmed: true });
-            res.send("ok");
-        } else {
-            res.send("nop");
-        }
-    });
-}
+import { routes } from "./routes/user";
+import { Router } from "express";
 
 (async () => {
     const redis = new Redis();
@@ -34,9 +19,11 @@ const confirmationRoute = (server: GraphQLServer, redis: Redis.Redis) => {
             url: `${request.protocol}://${request.get("host")}`,
         })
     });
+
+    const router: Router = routes(redis);
+    server.express.use("/", router);
     await createDabataseConnection();
     await server.start();
-    confirmationRoute(server, redis);
 
     console.log("Server listening on port 4000");
 })();
