@@ -76,6 +76,18 @@ test("register-malformed-user-password", async () => {
     expect(register.error).toHaveLength(1);
 });
 
+test("register-malformed-user-password-and-email", async () => {
+    const malformedPassword = password.substr(0, 4);
+    const malformedEmail = email.substr(0, 4);
+
+    // Insert malformed password
+    const malformedUserRegisterResponse: any = await request(GRAPHQL_HOST, registerMutation(firstName, malformedEmail, malformedPassword));
+    expect(malformedUserRegisterResponse).toMatchObject({ register: { success: false, code: 1, error: [{}, {}] } });
+
+    const { register } = malformedUserRegisterResponse;
+    expect(register.error).toHaveLength(2);
+});
+
 afterAll(async () => {
     await closeGlobalDatabaseConnection();
 });
