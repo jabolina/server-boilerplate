@@ -1,9 +1,10 @@
 import * as bcrypt from "bcryptjs";
 import * as yup from "yup";
-import { GraphQLResolver } from "../../types/graphql-utils";
+import { GraphQLResolver } from "../../types/graphqlUtils";
 import { User } from "../../entity/User";
 import { parseValidationError } from "../../utils/error";
 import { statusMessage } from "../../i18n";
+import { createConfirmationLink } from "../../utils/registerConfirmation";
 
 const schema = yup.object().shape({
     firstName: yup.string().min(4).max(30),
@@ -18,7 +19,7 @@ export const resolvers: GraphQLResolver = {
         },
     },
     Mutation: {
-        register: async (_, args: GQL.IRegisterOnMutationArguments) => {
+        register: async (_, args: GQL.IRegisterOnMutationArguments, { url, redis }) => {
             const REGISTER_CODE: any = 1;
 
             try {
@@ -41,6 +42,8 @@ export const resolvers: GraphQLResolver = {
                 });
 
                 await dbUser.save();
+                const confirmationLink: string = await createConfirmationLink(url, dbUser.id, redis);
+                console.log(confirmationLink);
 
                 return {
                     success: true,
