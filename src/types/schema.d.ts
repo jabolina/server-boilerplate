@@ -23,6 +23,7 @@ column: number;
 interface IQuery {
 __typename: "Query";
 hello: string;
+bye: string | null;
 }
 
 interface IHelloOnQueryArguments {
@@ -31,13 +32,26 @@ name?: string | null;
 
 interface IMutation {
 __typename: "Mutation";
-register: boolean | null;
+register: IRegisterResponse;
 }
 
 interface IRegisterOnMutationArguments {
 firstName: string;
 email: string;
 password: string;
+}
+
+interface IRegisterResponse {
+__typename: "RegisterResponse";
+success: boolean;
+error: Array<IError> | null;
+code: number;
+}
+
+interface IError {
+__typename: "Error";
+path: string;
+message: string;
 }
 }
 

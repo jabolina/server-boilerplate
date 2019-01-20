@@ -23,6 +23,7 @@
       "typescript": "3.2.4"
    },
    "dependencies": {
+      "@gql2ts/from-schema": "^1.10.1",
       "bcryptjs": "^2.4.3",
       "express": "^4.16.4",
       "graphql-import": "^0.7.1",
@@ -41,6 +42,6 @@
       "test:server": "NODE_ENV=test ts-node --files src/index.ts",
       "test": "jest",
       "dev": "NODE_ENV=dev nodemon --exec ts-node --files src/index.ts",
-      "gen-gql": "gql2ts src/graphql/schema.graphql -o src/types/schema.d.ts"
+      "gen-gql": "GENERATE_TYPES=true ts-node --files src/graphql/index.ts"
    }
 }

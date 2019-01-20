@@ -1,6 +1,7 @@
 import * as fs from "fs";
 import * as path from "path";
 import { importSchema } from "graphql-import";
+import { generateNamespace } from '@gql2ts/from-schema';
 import { GraphQLSchema } from "graphql";
 import { makeExecutableSchema, mergeSchemas } from "graphql-tools";
 
@@ -12,10 +13,18 @@ export const create = () => {
         if (!/[a-z]+\.ts/.test(name)) {
             const { resolvers } = require(`./${name}/resolvers`);
             const typeDefs: string = importSchema(path.join(__dirname) + `/${name}/schema.graphql`);
-            
+
             schemas.push(makeExecutableSchema({ resolvers, typeDefs }));
         }
     });
 
     return mergeSchemas({ schemas });
 };
+
+export const generateTypes = () => fs.writeFileSync(path.join(__dirname, "/../types/schema.d.ts"), generateNamespace("GQL", create()));
+
+(() => {
+    if (process.env.GENERATE_TYPES) {
+        generateTypes();
+    }
+})();
