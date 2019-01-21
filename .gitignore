@@ -6,3 +6,5 @@ tmp/
 temp/
 ormconfig.json
 dist
+.env
+dump.rdb

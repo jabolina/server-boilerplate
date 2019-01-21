@@ -1,6 +1,7 @@
 import "reflect-metadata";
 
 import { GraphQLServer } from "graphql-yoga";
+import "dotenv/config";
 
 import { create } from "./graphql";
 import { createDabataseConnection } from "./utils/typeorm";

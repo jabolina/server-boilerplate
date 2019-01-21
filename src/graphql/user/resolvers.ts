@@ -5,6 +5,7 @@ import { User } from "../../entity/User";
 import { parseValidationError } from "../../utils/error";
 import { statusMessage } from "../../i18n";
 import { createConfirmationLink } from "../../utils/registerConfirmation";
+import { sendEmail } from "../../service/email";
 
 const schema = yup.object().shape({
     firstName: yup.string().min(4).max(30),
@@ -41,9 +42,11 @@ export const resolvers: GraphQLResolver = {
                     password: hashedPassword,
                 });
 
+                if (process.env.NODE_ENV !== "test") {
+                    await sendEmail(dbUser.email, await createConfirmationLink(url, dbUser.id, redis), dbUser.firstName);
+                }
+
                 await dbUser.save();
-                const confirmationLink: string = await createConfirmationLink(url, dbUser.id, redis);
-                console.log(confirmationLink);
 
                 return {
                     success: true,
