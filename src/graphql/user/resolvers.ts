@@ -4,8 +4,8 @@ import { GraphQLResolver } from "../../types/graphqlUtils";
 import { User } from "../../entity/User";
 import { parseValidationError } from "../../utils/error";
 import { statusMessage } from "../../i18n";
+import { sendEmailSMTP } from "../../service/email";
 import { createConfirmationLink } from "../../utils/registerConfirmation";
-import { sendEmail } from "../../service/email";
 
 const schema = yup.object().shape({
     firstName: yup.string().min(4).max(30),
@@ -43,7 +43,9 @@ export const resolvers: GraphQLResolver = {
                 });
 
                 if (process.env.NODE_ENV !== "test") {
-                    await sendEmail(dbUser.email, await createConfirmationLink(url, dbUser.id, redis), dbUser.firstName);
+                    const link: string = await createConfirmationLink(url, dbUser.id, redis);
+                    console.log(link);
+                    await sendEmailSMTP(dbUser.email, link, dbUser.firstName);
                 }
 
                 await dbUser.save();
@@ -53,6 +55,7 @@ export const resolvers: GraphQLResolver = {
                     code: REGISTER_CODE,
                 };
             } catch (err) {
+                console.log(err);
                 return {
                     success: false,
                     code: REGISTER_CODE,

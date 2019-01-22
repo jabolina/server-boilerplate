@@ -8,3 +8,4 @@ ormconfig.json
 dist
 .env
 dump.rdb
+*.log
