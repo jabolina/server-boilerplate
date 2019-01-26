@@ -26,6 +26,12 @@ const messages: any = {
         "Inicio de sesión no válido",
         "Connexion invalide"
     ]),
+    3: messageFactory([
+        "Erro ao redefinir a senha",
+        "Error while resetting password",
+        "Error al restablecer la contraseña",
+        "Erreur lors de la réinitialisation du mot de passe",
+    ]),
 }
 
 export const errorMessage = (code: any) => {

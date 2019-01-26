@@ -26,6 +26,12 @@ const messages: any = {
         "Ha iniciado sesión correctamente",
         "Connecté avec succès",
     ]),
+    3: messageFactory([
+        "Sucesso na redefinição de senha",
+        "Success in password reset",
+        "Éxito en restablecer la contraseña",
+        "Réinitialisation du mot de passe",
+    ])
 }
 
 export const successMessage = (code: any) => {

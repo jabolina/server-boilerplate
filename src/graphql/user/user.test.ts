@@ -3,7 +3,7 @@ import { request } from "graphql-request";
 import { createDabataseConnection } from "../../utils/typeorm";
 import { User } from "../../entity/User";
 import { Connection } from "typeorm";
-import { createConfirmationLink } from "../../utils/registerConfirmation";
+import { createConfirmationLink } from "../../utils/linkFactory";
 import { redis } from "../../redis";
 
 const GRAPHQL_HOST = "http://localhost:4000";

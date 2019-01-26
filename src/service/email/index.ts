@@ -23,7 +23,7 @@ export const sendEmailSparkPost = async (recipient: string, link: string, userNa
     }
 };
 
-export const sendEmailSMTP = async (recipient: string, link: string, userName: string) => {
+export const sendEmailSMTP = async (recipient: string, subject: string, html: string) => {
     const options: any = {
         port: Number.parseInt(process.env.SMTP_PORT as string, 10),
         host: process.env.SMTP_HOST,
@@ -37,8 +37,8 @@ export const sendEmailSMTP = async (recipient: string, link: string, userName: s
     const envelope: any = {
         from: process.env.SMTP_USER,
         to: recipient,
-        subject: "Email confirmation",
-        html: verifyEmailTemplate(link, userName),
+        subject,
+        html,
     };
 
     const transporter: Transporter = createTransport(options);

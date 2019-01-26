@@ -1,12 +1,14 @@
 import * as bcrypt from "bcryptjs";
 import * as yup from "yup";
+import { REDIS_USER_SESSION_PREFIX } from "../../constants";
 import { User } from "../../entity/User";
 import { statusMessage } from "../../i18n";
 import { sendEmailSMTP } from "../../service/email";
+import { verifyEmailTemplate, accountChangesEmailTemplate, verifyEmailSubject, accountChangesSubject } from "../../service/email/template";
+import { lockAccount, removeAllSessions } from "../../service/user";
 import { GraphQLResolver } from "../../types/graphqlUtils";
 import { parseValidationError } from "../../utils/error";
-import { createConfirmationLink } from "../../utils/registerConfirmation";
-import { REDIS_USER_SESSION_PREFIX, REDIS_SESSION_PREFIX } from "../../constants";
+import { createConfirmationLink, createForgotPasswordLink } from "../../utils/linkFactory";
 
 const schema = yup.object().shape({
     firstName: yup.string().min(4).max(30),
@@ -45,7 +47,7 @@ export const resolvers: GraphQLResolver = {
 
                 if (process.env.NODE_ENV !== "test") {
                     const link: string = await createConfirmationLink(url, dbUser.id, redis);
-                    await sendEmailSMTP(dbUser.email, link, dbUser.firstName);
+                    await sendEmailSMTP(dbUser.email, verifyEmailSubject(dbUser.firstName), verifyEmailTemplate(link, dbUser.firstName));
                 }
 
                 return {
@@ -81,7 +83,7 @@ export const resolvers: GraphQLResolver = {
 
             const isPasswordValid: boolean = await bcrypt.compare(password, user.password);
 
-            if (!isPasswordValid || !user.confirmed) {
+            if (!isPasswordValid || !user.confirmed || user.disabled) {
                 return errorMessage;
             }
 
@@ -100,13 +102,28 @@ export const resolvers: GraphQLResolver = {
             const { userId } = session;
 
             if (userId) {
-                const allSessionIds: any[] = await redis.lrange(`${REDIS_USER_SESSION_PREFIX}${userId}`, 0, -1);
-                
-                allSessionIds.forEach(async (sessionId) => await redis.del(`${REDIS_SESSION_PREFIX}${sessionId}`));
+                await removeAllSessions(userId, redis);
                 return true;
             }
 
             return false;
+        },
+        sendForgotPasswordEmail: async (_, { email }: GQL.ISendForgotPasswordEmailOnMutationArguments, { url, redis }) => {
+            const user: User | undefined = await User.findOne({ where: { email }});
+
+            if (!user || !user.confirmed) {
+                return false;
+            }
+
+            const link: string = await createForgotPasswordLink(url, user.id, redis);
+            await lockAccount(user.id, redis);
+            await sendEmailSMTP(email, accountChangesSubject(user.firstName), accountChangesEmailTemplate(link, user.firstName));
+
+            return true;
+        },
+        changePassword: async (_, args: GQL.IChangePasswordOnMutationArguments, { redis }) => {
+            console.log(args);
+            console.log(redis);
         },
     },
 };

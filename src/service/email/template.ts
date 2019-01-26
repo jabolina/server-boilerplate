@@ -1,353 +1,657 @@
+export const verifyEmailSubject = (userName: string) => `Hi, ${userName}, we're just verifying your email :)`;
 export const verifyEmailTemplate = (link: string, userName: string) => `
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional //EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office"><head>
-    <!--[if gte mso 9]><xml>
-     <o:OfficeDocumentSettings>
-      <o:AllowPNG/>
-      <o:PixelsPerInch>96</o:PixelsPerInch>
-     </o:OfficeDocumentSettings>
-    </xml><![endif]-->
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <meta name="viewport" content="width=device-width">
-    <!--[if !mso]><!--><meta http-equiv="X-UA-Compatible" content="IE=edge"><!--<![endif]-->
-    <title></title>
-    <!--[if !mso]><!-- -->
-	<link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet" type="text/css">
-	<!--<![endif]-->
-    
-    <style type="text/css" id="media-query">
-      body {
-  margin: 0;
-  padding: 0; }
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Narrative Welcome Email</title>
+  <style type="text/css">
 
-table, tr, td {
-  vertical-align: top;
-  border-collapse: collapse; }
+  /* Take care of image borders and formatting */
 
-.ie-browser table, .mso-container table {
-  table-layout: fixed; }
+  img {
+    max-width: 600px;
+    outline: none;
+    text-decoration: none;
+    -ms-interpolation-mode: bicubic;
+  }
 
-* {
-  line-height: inherit; }
+  a {
+    border: 0;
+    outline: none;
+  }
 
-a[x-apple-data-detectors=true] {
-  color: inherit !important;
-  text-decoration: none !important; }
+  a img {
+    border: none;
+  }
 
-[owa] .img-container div, [owa] .img-container button {
-  display: block !important; }
+  /* General styling */
 
-[owa] .fullwidth button {
-  width: 100% !important; }
+  td, h1, h2, h3  {
+    font-family: Helvetica, Arial, sans-serif;
+    font-weight: 400;
+  }
 
-[owa] .block-grid .col {
-  display: table-cell;
-  float: none !important;
-  vertical-align: top; }
+  td {
+    font-size: 13px;
+    line-height: 19px;
+    text-align: left;
+  }
 
-.ie-browser .num12, .ie-browser .block-grid, [owa] .num12, [owa] .block-grid {
-  width: 650px !important; }
+  body {
+    -webkit-font-smoothing:antialiased;
+    -webkit-text-size-adjust:none;
+    width: 100%;
+    height: 100%;
+    color: #37302d;
+    background: #ffffff;
+  }
 
-.ExternalClass, .ExternalClass p, .ExternalClass span, .ExternalClass font, .ExternalClass td, .ExternalClass div {
-  line-height: 100%; }
+  table {
+    border-collapse: collapse !important;
+  }
 
-.ie-browser .mixed-two-up .num4, [owa] .mixed-two-up .num4 {
-  width: 216px !important; }
 
-.ie-browser .mixed-two-up .num8, [owa] .mixed-two-up .num8 {
-  width: 432px !important; }
+  h1, h2, h3, h4 {
+    padding: 0;
+    margin: 0;
+    color: #444444;
+    font-weight: 400;
+    line-height: 110%;
+  }
 
-.ie-browser .block-grid.two-up .col, [owa] .block-grid.two-up .col {
-  width: 325px !important; }
+  h1 {
+    font-size: 35px;
+  }
 
-.ie-browser .block-grid.three-up .col, [owa] .block-grid.three-up .col {
-  width: 216px !important; }
+  h2 {
+    font-size: 30px;
+  }
 
-.ie-browser .block-grid.four-up .col, [owa] .block-grid.four-up .col {
-  width: 162px !important; }
+  h3 {
+    font-size: 24px;
+  }
 
-.ie-browser .block-grid.five-up .col, [owa] .block-grid.five-up .col {
-  width: 130px !important; }
+  h4 {
+    font-size: 18px;
+    font-weight: normal;
+  }
 
-.ie-browser .block-grid.six-up .col, [owa] .block-grid.six-up .col {
-  width: 108px !important; }
+  .important-font {
+    color: #21BEB4;
+    font-weight: bold;
+  }
 
-.ie-browser .block-grid.seven-up .col, [owa] .block-grid.seven-up .col {
-  width: 92px !important; }
+  .hide {
+    display: none !important;
+  }
 
-.ie-browser .block-grid.eight-up .col, [owa] .block-grid.eight-up .col {
-  width: 81px !important; }
+  .force-full-width {
+    width: 100% !important;
+  }
 
-.ie-browser .block-grid.nine-up .col, [owa] .block-grid.nine-up .col {
-  width: 72px !important; }
+  </style>
 
-.ie-browser .block-grid.ten-up .col, [owa] .block-grid.ten-up .col {
-  width: 65px !important; }
+  <style type="text/css" media="screen">
+      @media screen {
+        @import url(http://fonts.googleapis.com/css?family=Open+Sans:400);
 
-.ie-browser .block-grid.eleven-up .col, [owa] .block-grid.eleven-up .col {
-  width: 59px !important; }
-
-.ie-browser .block-grid.twelve-up .col, [owa] .block-grid.twelve-up .col {
-  width: 54px !important; }
-
-@media only screen and (min-width: 670px) {
-  .block-grid {
-    width: 650px !important; }
-  .block-grid .col {
-    vertical-align: top; }
-    .block-grid .col.num12 {
-      width: 650px !important; }
-  .block-grid.mixed-two-up .col.num4 {
-    width: 216px !important; }
-  .block-grid.mixed-two-up .col.num8 {
-    width: 432px !important; }
-  .block-grid.two-up .col {
-    width: 325px !important; }
-  .block-grid.three-up .col {
-    width: 216px !important; }
-  .block-grid.four-up .col {
-    width: 162px !important; }
-  .block-grid.five-up .col {
-    width: 130px !important; }
-  .block-grid.six-up .col {
-    width: 108px !important; }
-  .block-grid.seven-up .col {
-    width: 92px !important; }
-  .block-grid.eight-up .col {
-    width: 81px !important; }
-  .block-grid.nine-up .col {
-    width: 72px !important; }
-  .block-grid.ten-up .col {
-    width: 65px !important; }
-  .block-grid.eleven-up .col {
-    width: 59px !important; }
-  .block-grid.twelve-up .col {
-    width: 54px !important; } }
-
-@media (max-width: 670px) {
-  .block-grid, .col {
-    min-width: 320px !important;
-    max-width: 100% !important;
-    display: block !important; }
-  .block-grid {
-    width: calc(100% - 40px) !important; }
-  .col {
-    width: 100% !important; }
-    .col > div {
-      margin: 0 auto; }
-  img.fullwidth, img.fullwidthOnMobile {
-    max-width: 100% !important; }
-  .no-stack .col {
-    min-width: 0 !important;
-    display: table-cell !important; }
-  .no-stack.two-up .col {
-    width: 50% !important; }
-  .no-stack.mixed-two-up .col.num4 {
-    width: 33% !important; }
-  .no-stack.mixed-two-up .col.num8 {
-    width: 66% !important; }
-  .no-stack.three-up .col.num4 {
-    width: 33% !important; }
-  .no-stack.four-up .col.num3 {
-    width: 25% !important; }
-  .mobile_hide {
-    min-height: 0px;
-    max-height: 0px;
-    max-width: 0px;
-    display: none;
-    overflow: hidden;
-    font-size: 0px; } }
-
-    </style>
-</head>
-<body class="clean-body" style="margin: 0;padding: 0;-webkit-text-size-adjust: 100%;background-color: #FFFFFF">
-  <style type="text/css" id="media-query-bodytag">
-    @media (max-width: 520px) {
-      .block-grid {
-        min-width: 320px!important;
-        max-width: 100%!important;
-        width: 100%!important;
-        display: block!important;
-      }
-
-      .col {
-        min-width: 320px!important;
-        max-width: 100%!important;
-        width: 100%!important;
-        display: block!important;
-      }
-
-        .col > div {
-          margin: 0 auto;
+        /* Thanks Outlook 2013! */
+        td, h1, h2, h3 {
+          font-family: 'Open Sans', 'Helvetica Neue', Arial, sans-serif !important;
         }
+      }
+  </style>
 
-      img.fullwidth {
-        max-width: 100%!important;
+  <style type="text/css" media="only screen and (max-width: 600px)">
+    /* Mobile styles */
+    @media only screen and (max-width: 600px) {
+
+      table[class="w320"] {
+        width: 320px !important;
       }
-			img.fullwidthOnMobile {
-        max-width: 100%!important;
+
+      table[class="w300"] {
+        width: 300px !important;
       }
-      .no-stack .col {
-				min-width: 0!important;
-				display: table-cell!important;
-			}
-			.no-stack.two-up .col {
-				width: 50%!important;
-			}
-			.no-stack.mixed-two-up .col.num4 {
-				width: 33%!important;
-			}
-			.no-stack.mixed-two-up .col.num8 {
-				width: 66%!important;
-			}
-			.no-stack.three-up .col.num4 {
-				width: 33%!important;
-			}
-			.no-stack.four-up .col.num3 {
-				width: 25%!important;
-			}
-      .mobile_hide {
-        min-height: 0px!important;
-        max-height: 0px!important;
-        max-width: 0px!important;
-        display: none!important;
-        overflow: hidden!important;
-        font-size: 0px!important;
+
+      table[class="w290"] {
+        width: 290px !important;
+      }
+
+      td[class="w320"] {
+        width: 320px !important;
+      }
+
+      td[class~="mobile-padding"] {
+        padding-left: 14px !important;
+        padding-right: 14px !important;
+      }
+
+      td[class*="mobile-padding-left"] {
+        padding-left: 14px !important;
+      }
+
+      td[class*="mobile-padding-right"] {
+        padding-right: 14px !important;
+      }
+
+      td[class*="mobile-padding-left-only"] {
+        padding-left: 14px !important;
+        padding-right: 0 !important;
+      }
+
+      td[class*="mobile-padding-right-only"] {
+        padding-right: 14px !important;
+        padding-left: 0 !important;
+      }
+
+      td[class*="mobile-block"] {
+        display: block !important;
+        width: 100% !important;
+        text-align: left !important;
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+        padding-bottom: 15px !important;
+      }
+
+      td[class*="mobile-no-padding-bottom"] {
+        padding-bottom: 0 !important;
+      }
+
+      td[class~="mobile-center"] {
+        text-align: center !important;
+      }
+
+      table[class*="mobile-center-block"] {
+        float: none !important;
+        margin: 0 auto !important;
+      }
+
+      *[class*="mobile-hide"] {
+        display: none !important;
+        width: 0 !important;
+        height: 0 !important;
+        line-height: 0 !important;
+        font-size: 0 !important;
+      }
+
+      td[class*="mobile-border"] {
+        border: 0 !important;
       }
     }
   </style>
-  <!--[if IE]><div class="ie-browser"><![endif]-->
-  <!--[if mso]><div class="mso-container"><![endif]-->
-  <table class="nl-container" style="border-collapse: collapse;table-layout: fixed;border-spacing: 0;mso-table-lspace: 0pt;mso-table-rspace: 0pt;vertical-align: top;min-width: 320px;Margin: 0 auto;background-color: #FFFFFF;width: 100%" cellpadding="0" cellspacing="0">
-	<tbody>
-	<tr style="vertical-align: top">
-		<td style="word-break: break-word;border-collapse: collapse !important;vertical-align: top">
-    <!--[if (mso)|(IE)]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td align="center" style="background-color: #FFFFFF;"><![endif]-->
+</head>
+<body class="body" style="padding:0; margin:0; display:block; background:#ffffff; -webkit-text-size-adjust:none" bgcolor="#ffffff">
+<table align="center" cellpadding="0" cellspacing="0" width="100%" height="100%">
+  <tr>
+    <td align="center" valign="top" bgcolor="#ffffff"  width="100%">
 
-    <div style="background-image:url('https://d1oco4z2z1fhwp.cloudfront.net/templates/default/13/bg.jpg');background-position:top center;background-repeat:no-repeat;;background-color:transparent">
-      <div style="Margin: 0 auto;min-width: 320px;max-width: 650px;overflow-wrap: break-word;word-wrap: break-word;word-break: break-word;background-color: transparent;" class="block-grid ">
-        <div style="border-collapse: collapse;display: table;width: 100%;background-color:transparent;">
-          <!--[if (mso)|(IE)]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="background-image:url('https://d1oco4z2z1fhwp.cloudfront.net/templates/default/13/bg.jpg');background-position:top center;background-repeat:no-repeat;;background-color:transparent" align="center"><table cellpadding="0" cellspacing="0" border="0" style="width: 650px;"><tr class="layout-full-width" style="background-color:transparent;"><![endif]-->
+    <table cellspacing="0" cellpadding="0" width="100%">
+      <tr>
+        <td style="background:#1f1f1f" width="100%">
 
-              <!--[if (mso)|(IE)]><td align="center" width="650" style=" width:650px; padding-right: 25px; padding-left: 0px; padding-top:30px; padding-bottom:30px; border-top: 0px solid transparent; border-left: 0px solid transparent; border-bottom: 0px solid transparent; border-right: 0px solid transparent;" valign="top"><![endif]-->
-            <div class="col num12" style="min-width: 320px;max-width: 650px;display: table-cell;vertical-align: top;">
-              <div style="background-color: transparent; width: 100% !important;">
-              <!--[if (!mso)&(!IE)]><!--><div style="border-top: 0px solid transparent; border-left: 0px solid transparent; border-bottom: 0px solid transparent; border-right: 0px solid transparent; padding-top:30px; padding-bottom:30px; padding-right: 25px; padding-left: 0px;"><!--<![endif]-->
+          <center>
+            <table cellspacing="0" cellpadding="0" width="600" class="w320">
+              <tr>
+                <td valign="top" class="mobile-block mobile-no-padding-bottom mobile-center" width="270" style="background:#1f1f1f;padding:10px 10px 10px 20px;">
+                  <a href="#" style="text-decoration:none;">
+                    <img src="https://www.filepicker.io/api/file/X9R4FqRPaEIS3vMxFXgl" width="142" height="30" alt="Your Logo"/>
+                  </a>
+                </td>
+                <td valign="top" class="mobile-block mobile-center" width="270" style="background:#1f1f1f;padding:10px 15px 10px 10px">
+                  <table border="0" cellpadding="0" cellspacing="0" class="mobile-center-block" align="right">
+                    <tr>
+                      <td align="right">
+                        <a href="#">
+                        <img src="http://keenthemes.com/assets/img/emailtemplate/social_facebook.png"  width="30" height="30" alt="social icon"/>
+                        </a>
+                      </td>
+                      <td align="right" style="padding-left:5px">
+                        <a href="#">
+                        <img src="http://keenthemes.com/assets/img/emailtemplate/social_twitter.png"  width="30" height="30" alt="social icon"/>
+                        </a>
+                      </td>
+                      <td align="right" style="padding-left:5px">
+                        <a href="#">
+                        <img src="http://keenthemes.com/assets/img/emailtemplate/social_googleplus.png"  width="30" height="30" alt="social icon"/>
+                        </a>
+                      </td>
+                      <td align="right" style="padding-left:5px">
+                        <a href="#">
+                        <img src="http://keenthemes.com/assets/img/emailtemplate/social_linkedin.png"  width="30" height="30" alt="social icon"/>
+                        </a>
+                      </td>
+                      <td align="right" style="padding-left:5px">
+                        <a href="#">
+                        <img src="http://keenthemes.com/assets/img/emailtemplate/social_rss.png"  width="30" height="30" alt="social icon"/>
+                        </a>
+                      </td>
+                    </tr>
+                  </table>
+                </td>
+              </tr>
+            </table>
+          </center>
 
-                  
-                    <div class="">
-	<!--[if mso]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="padding-right: 0px; padding-left: 0px; padding-top: 30px; padding-bottom: 25px;"><![endif]-->
-	<div style="color:#333333;font-family:'Lato', Tahoma, Verdana, Segoe, sans-serif;line-height:120%; padding-right: 0px; padding-left: 0px; padding-top: 30px; padding-bottom: 25px;">	
-		<div style="font-size:12px;line-height:14px;font-family:'Lato',Tahoma,Verdana,Segoe,sans-serif;color:#333333;text-align:left;"><p style="margin: 0;font-size: 14px;line-height: 17px;text-align: right">&#160;</p><p style="margin: 0;font-size: 14px;line-height: 17px;text-align: right"><span style="font-size: 28px; line-height: 33px;">Hi, ${userName}!<br><br></span></p></div>	
-	</div>
-	<!--[if mso]></td></tr></table><![endif]-->
-</div>
-                  
-              <!--[if (!mso)&(!IE)]><!--></div><!--<![endif]-->
-              </div>
-            </div>
-          <!--[if (mso)|(IE)]></td></tr></table></td></tr></table><![endif]-->
-        </div>
-      </div>
-    </div>
-    <div style="background-color:#f0f0f0;">
-      <div style="Margin: 0 auto;min-width: 320px;max-width: 650px;overflow-wrap: break-word;word-wrap: break-word;word-break: break-word;background-color: transparent;" class="block-grid ">
-        <div style="border-collapse: collapse;display: table;width: 100%;background-color:transparent;">
-          <!--[if (mso)|(IE)]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="background-color:#f0f0f0;" align="center"><table cellpadding="0" cellspacing="0" border="0" style="width: 650px;"><tr class="layout-full-width" style="background-color:transparent;"><![endif]-->
+        </td>
+      </tr>
+      <tr>
+        <td style="border-bottom:1px solid #e7e7e7;">
 
-              <!--[if (mso)|(IE)]><td align="center" width="650" style=" width:650px; padding-right: 0px; padding-left: 0px; padding-top:30px; padding-bottom:30px; border-top: 0px solid transparent; border-left: 0px solid transparent; border-bottom: 0px solid transparent; border-right: 0px solid transparent;" valign="top"><![endif]-->
-            <div class="col num12" style="min-width: 320px;max-width: 650px;display: table-cell;vertical-align: top;">
-              <div style="background-color: transparent; width: 100% !important;">
-              <!--[if (!mso)&(!IE)]><!--><div style="border-top: 0px solid transparent; border-left: 0px solid transparent; border-bottom: 0px solid transparent; border-right: 0px solid transparent; padding-top:30px; padding-bottom:30px; padding-right: 0px; padding-left: 0px;"><!--<![endif]-->
+          <center>
+            <table cellpadding="0" cellspacing="0" width="600" class="w320">
+              <tr>
+                <td align="left" class="mobile-padding" style="padding:20px 20px 0">
 
-                  
-                    <div class="">
-	<!--[if mso]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="padding-right: 10px; padding-left: 10px; padding-top: 25px; padding-bottom: 10px;"><![endif]-->
-	<div style="color:#333333;font-family:'Lato', Tahoma, Verdana, Segoe, sans-serif;line-height:120%; padding-right: 10px; padding-left: 10px; padding-top: 25px; padding-bottom: 10px;">	
-		<div style="font-size:12px;line-height:14px;color:#333333;font-family:'Lato', Tahoma, Verdana, Segoe, sans-serif;text-align:left;"><p style="margin: 0;font-size: 18px;line-height: 22px;text-align: center"><span style="font-size: 24px; line-height: 28px;"><strong>Server boilerplate<br></strong></span></p></div>	
-	</div>
-	<!--[if mso]></td></tr></table><![endif]-->
-</div>
-                  
-                  
-                    <div class="">
-	<!--[if mso]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="padding-right: 10px; padding-left: 10px; padding-top: 0px; padding-bottom: 10px;"><![endif]-->
-	<div style="color:#A5A5A6;font-family:'Lato', Tahoma, Verdana, Segoe, sans-serif;line-height:150%; padding-right: 10px; padding-left: 10px; padding-top: 0px; padding-bottom: 10px;">	
-		<div style="font-size:12px;line-height:18px;color:#A5A5A6;font-family:'Lato', Tahoma, Verdana, Segoe, sans-serif;text-align:left;"><p style="margin: 0;font-size: 14px;line-height: 21px;text-align: center">This is the server boilerplate email verification,</p><p style="margin: 0;font-size: 14px;line-height: 21px;text-align: center">please click in the link bellow</p><p style="margin: 0;font-size: 14px;line-height: 21px;text-align: center">to verify your email.</p></div>	
-	</div>
-	<!--[if mso]></td></tr></table><![endif]-->
-</div>
-                  
-                  
-                    
-<div align="center" class="button-container center " style="padding-right: 0px; padding-left: 0px; padding-top:0px; padding-bottom:0px;">
-  <!--[if mso]><table width="100%" cellpadding="0" cellspacing="0" border="0" style="border-spacing: 0; border-collapse: collapse; mso-table-lspace:0pt; mso-table-rspace:0pt;"><tr><td style="padding-right: 0px; padding-left: 0px; padding-top:0px; padding-bottom:0px;" align="center"><v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="" style="height:27pt; v-text-anchor:middle; width:165pt;" arcsize="12%" strokecolor="#B2D476" fillcolor="#B2D476"><w:anchorlock/><v:textbox inset="0,0,0,0"><center style="color:#ffffff; font-family:'Lato', Tahoma, Verdana, Segoe, sans-serif; font-size:14px;"><![endif]-->
-    <div style="color: #ffffff; background-color: #B2D476; border-radius: 4px; -webkit-border-radius: 4px; -moz-border-radius: 4px; max-width: 610px; width: 30%; border-top: 2px solid #B2D476; border-right: 0px solid #B2D476; border-bottom: 6px solid #B2D476; border-left: 0px solid #B2D476; padding-top: 0px; padding-right: 20px; padding-bottom: 0px; padding-left: 20px; font-family: 'Lato', Tahoma, Verdana, Segoe, sans-serif; text-align: center; mso-border-alt: none;">
-      <span style="font-size:12px;line-height:24px;"><a href=${link} style="text-decoration: none; color: white;"><span style="font-size: 14px; line-height: 40px;">VERIFY</span></a></span>
-    </div>
-  <!--[if mso]></center></v:textbox></v:roundrect></td></tr></table><![endif]-->
-</div>
+                  <br class="mobile-hide" />
 
-                  
-                  
-                    
-<table border="0" cellpadding="0" cellspacing="0" width="100%" class="divider " style="border-collapse: collapse;table-layout: fixed;border-spacing: 0;mso-table-lspace: 0pt;mso-table-rspace: 0pt;vertical-align: top;min-width: 100%;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%">
-    <tbody>
-        <tr style="vertical-align: top">
-            <td class="divider_inner" style="word-break: break-word;border-collapse: collapse !important;vertical-align: top;padding-right: 10px;padding-left: 10px;padding-top: 10px;padding-bottom: 10px;min-width: 100%;mso-line-height-rule: exactly;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%">
-                <table class="divider_content" align="center" border="0" cellpadding="0" cellspacing="0" width="100%" style="border-collapse: collapse;table-layout: fixed;border-spacing: 0;mso-table-lspace: 0pt;mso-table-rspace: 0pt;vertical-align: top;border-top: 0px solid transparent;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%">
-                    <tbody>
-                        <tr style="vertical-align: top">
-                            <td style="word-break: break-word;border-collapse: collapse !important;vertical-align: top;mso-line-height-rule: exactly;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%">
-                                <span></span>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </td>
-        </tr>
-    </tbody>
-</table>
-                  
-              <!--[if (!mso)&(!IE)]><!--></div><!--<![endif]-->
-              </div>
-            </div>
-          <!--[if (mso)|(IE)]></td></tr></table></td></tr></table><![endif]-->
-        </div>
-      </div>
-    </div>
-    <div style="background-color:#ffffff;">
-      <div style="Margin: 0 auto;min-width: 320px;max-width: 650px;overflow-wrap: break-word;word-wrap: break-word;word-break: break-word;background-color: transparent;" class="block-grid ">
-        <div style="border-collapse: collapse;display: table;width: 100%;background-color:transparent;">
-          <!--[if (mso)|(IE)]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="background-color:#ffffff;" align="center"><table cellpadding="0" cellspacing="0" border="0" style="width: 650px;"><tr class="layout-full-width" style="background-color:transparent;"><![endif]-->
+                  <h1>Welcome to Awesome Co, ${userName}</h1>
 
-              <!--[if (mso)|(IE)]><td align="center" width="650" style=" width:650px; padding-right: 0px; padding-left: 0px; padding-top:30px; padding-bottom:30px; border-top: 0px solid transparent; border-left: 0px solid transparent; border-bottom: 0px solid transparent; border-right: 0px solid transparent;" valign="top"><![endif]-->
-            <div class="col num12" style="min-width: 320px;max-width: 650px;display: table-cell;vertical-align: top;">
-              <div style="background-color: transparent; width: 100% !important;">
-              <!--[if (!mso)&(!IE)]><!--><div style="border-top: 0px solid transparent; border-left: 0px solid transparent; border-bottom: 0px solid transparent; border-right: 0px solid transparent; padding-top:30px; padding-bottom:30px; padding-right: 0px; padding-left: 0px;"><!--<![endif]-->
+                  <br>
+                  We're excited you're here! Learn more about Awesome Co and activate your new account by clicking the link below!<br>
+                  <br>
 
-                  
-                    <div class="">
-	<!--[if mso]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="padding-right: 10px; padding-left: 10px; padding-top: 15px; padding-bottom: 10px;"><![endif]-->
-	<div style="color:#959595;font-family:'Lato', Tahoma, Verdana, Segoe, sans-serif;line-height:150%; padding-right: 10px; padding-left: 10px; padding-top: 15px; padding-bottom: 10px;">	
-		<div style="font-size:12px;line-height:18px;color:#959595;font-family:'Lato', Tahoma, Verdana, Segoe, sans-serif;text-align:left;"><p style="margin: 0;font-size: 14px;line-height: 21px;text-align: center">This is a sample template from <strong>BEE editor </strong></p><p style="margin: 0;font-size: 14px;line-height: 21px;text-align: center">Create beautiful email messages at no cost.</p></div>	
-	</div>
-	<!--[if mso]></td></tr></table><![endif]-->
-</div>
-                  
-              <!--[if (!mso)&(!IE)]><!--></div><!--<![endif]-->
-              </div>
-            </div>
-          <!--[if (mso)|(IE)]></td></tr></table></td></tr></table><![endif]-->
-        </div>
-      </div>
-    </div>
-   <!--[if (mso)|(IE)]></td></tr></table><![endif]-->
-		</td>
+                  <table cellspacing="0" cellpadding="0" width="100%" bgcolor="#ffffff">
+                    <tr>
+                      <td style="width:130px;background:#D84A38;">
+                        <div>
+                          <!--[if mso]>
+                          <v:rect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="#" style="height:33px;v-text-anchor:middle;width:130px;" stroke="f" fillcolor="#D84A38">
+                            <w:anchorlock/>
+                            <center>
+                          <![endif]-->
+                              <a href="${link}"
+                        style="background-color:#D84A38;color:#ffffff;display:inline-block;font-family:sans-serif;font-size:13px;font-weight:bold;line-height:33px;text-align:center;text-decoration:none;width:130px;-webkit-text-size-adjust:none;">Activate!</a>
+                          <!--[if mso]>
+                            </center>
+                          </v:rect>
+                          <![endif]-->
+                        </div>
+                      </td>
+                      <td width="316" style="background-color:#ffffff; font-size:0; line-height:0;">&nbsp;</td>
+                    </tr>
+                  </table>
+                  <br><br>
+                </td>
+                <td class="mobile-hide" style="padding-top:20px;padding-bottom:0;vertical-align:bottom">
+                  <table cellspacing="0" cellpadding="0" width="100%">
+                    <tr>
+                      <td align="right" valign="bottom" width="220" style="padding-right:20px; padding-bottom:0; vertical-align:bottom;">
+                      <img  style="display:block" src="https://www.filepicker.io/api/file/AvB8yENR7OdiUqonW05y"  width="174" height="294" alt="iphone"/>
+                      </td>
+                    </tr>
+                  </table>
+                </td>
+              </tr>
+            </table>
+          </center>
+
+        </td>
+      </tr>
+      <tr>
+        <td valign="top" style="background-color:#f8f8f8;border-bottom:1px solid #e7e7e7;">
+
+          <center>
+            <table border="0" cellpadding="0" cellspacing="0" width="600" class="w320" style="height:100%;">
+              <tr>
+                <td valign="top" class="mobile-padding" style="padding:20px;">
+                  <h2>Enjoy 50% off!</h2>
+                  <br>
+                  You'll be the first to hear about new arrivals, exclusive promotionas, cool collaborations, and the latest in everything.<br>
+                  <br>
+                  Enter <b>XLKIJP6887F</b> at your next checkout!<br><br>
+                </td>
+              </tr>
+            </table>
+          </center>
+
+        </td>
+      </tr>
+      <tr>
+        <td style="background-color:#1f1f1f;">
+          <center>
+            <table border="0" cellpadding="0" cellspacing="0" width="600" class="w320" style="height:100%;color:#ffffff" bgcolor="#1f1f1f" >
+              <tr>
+                <td align="right" valign="middle" class="mobile-padding" style="font-size:12px;padding:20px; background-color:#1f1f1f; color:#ffffff; text-align:left; ">
+                  <a style="color:#ffffff;"  href="#">Contact Us</a>&nbsp;&nbsp;|&nbsp;&nbsp;
+                  <a style="color:#ffffff;" href="#">Facebook</a>&nbsp;&nbsp;|&nbsp;&nbsp;
+                  <a style="color:#ffffff;" href="#">Twitter</a>&nbsp;&nbsp;|&nbsp;&nbsp;
+                  <a style="color:#ffffff;" href="#">Support</a>
+                </td>
+              </tr>
+            </table>
+          </center>
+        </td>
+      </tr>
+    </table>
+
+    </td>
   </tr>
-  </tbody>
-  </table>
-  <!--[if (mso)|(IE)]></div><![endif]-->
+</table>
+</body>
+</html>
+`;
+
+export const accountChangesSubject = (userName: string) => `Hey, ${userName}, some changes in your account`;
+export const accountChangesEmailTemplate = (link: string, userName: string) => `
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Narrative Ping Email</title>
+  <style type="text/css">
+
+  /* Take care of image borders and formatting */
+
+  img {
+    max-width: 600px;
+    outline: none;
+    text-decoration: none;
+    -ms-interpolation-mode: bicubic;
+  }
+
+  a {
+    border: 0;
+    outline: none;
+  }
+
+  a img {
+    border: none;
+  }
+
+  /* General styling */
+
+  td, h1, h2, h3  {
+    font-family: Helvetica, Arial, sans-serif;
+    font-weight: 400;
+  }
+
+  td {
+    font-size: 13px;
+    line-height: 19px;
+    text-align: left;
+  }
+
+  body {
+    -webkit-font-smoothing:antialiased;
+    -webkit-text-size-adjust:none;
+    width: 100%;
+    height: 100%;
+    color: #37302d;
+    background: #ffffff;
+  }
+
+  table {
+    border-collapse: collapse !important;
+  }
 
 
-</body></html>
+  h1, h2, h3, h4 {
+    padding: 0;
+    margin: 0;
+    color: #444444;
+    font-weight: 400;
+    line-height: 110%;
+  }
+
+  h1 {
+    font-size: 35px;
+  }
+
+  h2 {
+    font-size: 30px;
+  }
+
+  h3 {
+    font-size: 24px;
+  }
+
+  h4 {
+    font-size: 18px;
+    font-weight: normal;
+  }
+
+  .important-font {
+    color: #21BEB4;
+    font-weight: bold;
+  }
+
+  .hide {
+    display: none !important;
+  }
+
+  .force-full-width {
+    width: 100% !important;
+  }
+
+  </style>
+
+  <style type="text/css" media="screen">
+      @media screen {
+        @import url(http://fonts.googleapis.com/css?family=Open+Sans:400);
+
+        /* Thanks Outlook 2013! */
+        td, h1, h2, h3 {
+          font-family: 'Open Sans', 'Helvetica Neue', Arial, sans-serif !important;
+        }
+      }
+  </style>
+
+  <style type="text/css" media="only screen and (max-width: 600px)">
+    /* Mobile styles */
+    @media only screen and (max-width: 600px) {
+
+      table[class="w320"] {
+        width: 320px !important;
+      }
+
+      table[class="w300"] {
+        width: 300px !important;
+      }
+
+      table[class="w290"] {
+        width: 290px !important;
+      }
+
+      td[class="w320"] {
+        width: 320px !important;
+      }
+
+      td[class~="mobile-padding"] {
+        padding-left: 14px !important;
+        padding-right: 14px !important;
+      }
+
+      td[class*="mobile-padding-left"] {
+        padding-left: 14px !important;
+      }
+
+      td[class*="mobile-padding-right"] {
+        padding-right: 14px !important;
+      }
+
+      td[class*="mobile-padding-left-only"] {
+        padding-left: 14px !important;
+        padding-right: 0 !important;
+      }
+
+      td[class*="mobile-padding-right-only"] {
+        padding-right: 14px !important;
+        padding-left: 0 !important;
+      }
+
+      td[class*="mobile-block"] {
+        display: block !important;
+        width: 100% !important;
+        text-align: left !important;
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+        padding-bottom: 15px !important;
+      }
+
+      td[class*="mobile-no-padding-bottom"] {
+        padding-bottom: 0 !important;
+      }
+
+      td[class~="mobile-center"] {
+        text-align: center !important;
+      }
+
+      table[class*="mobile-center-block"] {
+        float: none !important;
+        margin: 0 auto !important;
+      }
+
+      *[class*="mobile-hide"] {
+        display: none !important;
+        width: 0 !important;
+        height: 0 !important;
+        line-height: 0 !important;
+        font-size: 0 !important;
+      }
+
+      td[class*="mobile-border"] {
+        border: 0 !important;
+      }
+    }
+  </style>
+</head>
+<body class="body" style="padding:0; margin:0; display:block; background:#ffffff; -webkit-text-size-adjust:none" bgcolor="#ffffff">
+<table align="center" cellpadding="0" cellspacing="0" width="100%" height="100%">
+  <tr>
+    <td align="center" valign="top" bgcolor="#ffffff"  width="100%">
+
+    <table cellspacing="0" cellpadding="0" width="100%">
+      <tr>
+        <td style="background:#1f1f1f" width="100%">
+
+          <center>
+            <table cellspacing="0" cellpadding="0" width="600" class="w320">
+              <tr>
+                <td valign="top" class="mobile-block mobile-no-padding-bottom mobile-center" width="270" style="background:#1f1f1f;padding:10px 10px 10px 20px;">
+                  <a href="#" style="text-decoration:none;">
+                    <img src="https://www.filepicker.io/api/file/X9R4FqRPaEIS3vMxFXgl" width="142" height="30" alt="Your Logo"/>
+                  </a>
+                </td>
+                <td valign="top" class="mobile-block mobile-center" width="270" style="background:#1f1f1f;padding:10px 15px 10px 10px">
+                  <table border="0" cellpadding="0" cellspacing="0" class="mobile-center-block" align="right">
+                    <tr>
+                      <td align="right">
+                        <a href="#">
+                        <img src="http://keenthemes.com/assets/img/emailtemplate/social_facebook.png"  width="30" height="30" alt="social icon"/>
+                        </a>
+                      </td>
+                      <td align="right" style="padding-left:5px">
+                        <a href="#">
+                        <img src="http://keenthemes.com/assets/img/emailtemplate/social_twitter.png"  width="30" height="30" alt="social icon"/>
+                        </a>
+                      </td>
+                      <td align="right" style="padding-left:5px">
+                        <a href="#">
+                        <img src="http://keenthemes.com/assets/img/emailtemplate/social_googleplus.png"  width="30" height="30" alt="social icon"/>
+                        </a>
+                      </td>
+                      <td align="right" style="padding-left:5px">
+                        <a href="#">
+                        <img src="http://keenthemes.com/assets/img/emailtemplate/social_linkedin.png"  width="30" height="30" alt="social icon"/>
+                        </a>
+                      </td>
+                      <td align="right" style="padding-left:5px">
+                        <a href="#">
+                        <img src="http://keenthemes.com/assets/img/emailtemplate/social_rss.png"  width="30" height="30" alt="social icon"/>
+                        </a>
+                      </td>
+                    </tr>
+                  </table>
+                </td>
+              </tr>
+            </table>
+          </center>
+
+        </td>
+      </tr>
+      <tr>
+        <td style="border-bottom:1px solid #e7e7e7;">
+
+          <center>
+            <table cellpadding="0" cellspacing="0" width="600" class="w320">
+              <tr>
+                <td align="left" class="mobile-padding" style="padding:20px 20px 0">
+
+                  <h1>Your account settings have been updated!</h1>
+
+                  <table cellpadding="0" cellspacing="0" width="100%">
+                    <tr>
+                      <td style="padding-top:8px;padding-bottom:10px">
+                        <h4>Hi, ${userName}</h4>
+                      </td>
+                    </tr>
+                  </table>
+
+                  <div class="textdark">
+                    Your account settings have been updated. If you did not update your settings, please <a href="#">contact support</a>.
+                  </div>
+                  <br>
+                  <div>
+                    <div><!--[if mso]>
+                      <v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="#" style="height:33px;v-text-anchor:middle;width:190px;" arcsize="0%" stroke="f" fillcolor="#D84A38">
+                        <w:anchorlock/>
+                        <center>
+                      <![endif]-->
+                          <a href="${link}"
+                    style="background-color:#D84A38;border-radius:0px;color:#ffffff;display:inline-block;font-family:sans-serif;font-size:13px;font-weight:bold;line-height:33px;text-align:center;text-decoration:none;width:190px;-webkit-text-size-adjust:none;">Review Account Settings</a>
+                      <!--[if mso]>
+                        </center>
+                      </v:roundrect>
+                    <![endif]--></div>
+                  </div>
+                  <br>
+
+                  <div class="textdark">
+                    Thanks for being a customer,
+                  </div>
+                  <h4><b>Company Name</b></h4>
+                  <br><br>
+                </td>
+                <td class="mobile-hide" style="padding-top:20px;padding-bottom:0;vertical-align:bottom">
+                  <table cellspacing="0" cellpadding="0" width="100%">
+                    <tr>
+                      <td align="right" valign="bottom" width="220" style="padding-right:20px; padding-bottom:0; vertical-align:bottom;">
+                      <img  style="display:block" src="https://www.filepicker.io/api/file/AvB8yENR7OdiUqonW05y"  width="174" height="294" alt="iphone"/>
+                      </td>
+                    </tr>
+                  </table>
+                </td>
+              </tr>
+            </table>
+          </center>
+
+        </td>
+      </tr>
+      <tr>
+        <td style="background-color:#1f1f1f;">
+          <center>
+            <table border="0" cellpadding="0" cellspacing="0" width="600" class="w320" style="height:100%;color:#ffffff" bgcolor="#1f1f1f" >
+              <tr>
+                <td align="right" valign="middle" class="mobile-padding" style="font-size:12px;padding:20px; background-color:#1f1f1f; color:#ffffff; text-align:left; ">
+                  <a style="color:#ffffff;"  href="#">Contact Us</a>&nbsp;&nbsp;|&nbsp;&nbsp;
+                  <a style="color:#ffffff;" href="#">Facebook</a>&nbsp;&nbsp;|&nbsp;&nbsp;
+                  <a style="color:#ffffff;" href="#">Twitter</a>&nbsp;&nbsp;|&nbsp;&nbsp;
+                  <a style="color:#ffffff;" href="#">Support</a>
+                </td>
+              </tr>
+            </table>
+          </center>
+        </td>
+      </tr>
+    </table>
+
+    </td>
+  </tr>
+</table>
+</body>
+</html>
 `;

@@ -17,4 +17,7 @@ export class User extends BaseEntity {
 
     @Column("boolean", { default: false })
     confirmed!: boolean;
+
+    @Column("boolean", { default: false })
+    disabled!: boolean;
 }

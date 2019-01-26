@@ -15,8 +15,15 @@ type LoginResponse {
     error: [Error!]
     code: Int!
 }
+type ChangePasswordResponse {
+    success: Boolean!
+    code: Int!
+    error: [Error!]
+}
 type Mutation {
     register(firstName: String!, email: String!, password: String!): RegisterResponse!
     login(email: String!, password: String!): LoginResponse!
     logout: Boolean!
+    sendForgotPasswordEmail(email: String!): Boolean!
+    changePassword(newPassword: String!, key: String!): ChangePasswordResponse!
 }

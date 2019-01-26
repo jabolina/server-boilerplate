@@ -22,18 +22,23 @@ declare namespace GQL {
 
   interface IQuery {
     __typename: 'Query';
-    hello: string;
-    bye: string | null;
+    me: IUser | null;
+    dummy: string | null;
   }
 
-  interface IHelloOnQueryArguments {
-    name?: string | null;
+  interface IUser {
+    __typename: 'User';
+    id: string;
+    email: string;
   }
 
   interface IMutation {
     __typename: 'Mutation';
     register: IRegisterResponse;
     login: ILoginResponse;
+    logout: boolean;
+    sendForgotPasswordEmail: boolean;
+    changePassword: IChangePasswordResponse;
   }
 
   interface IRegisterOnMutationArguments {
@@ -45,6 +50,15 @@ declare namespace GQL {
   interface ILoginOnMutationArguments {
     email: string;
     password: string;
+  }
+
+  interface ISendForgotPasswordEmailOnMutationArguments {
+    email: string;
+  }
+
+  interface IChangePasswordOnMutationArguments {
+    newPassword: string;
+    key: string;
   }
 
   interface IRegisterResponse {
@@ -65,6 +79,13 @@ declare namespace GQL {
     success: boolean;
     error: Array<IError> | null;
     code: number;
+  }
+
+  interface IChangePasswordResponse {
+    __typename: 'ChangePasswordResponse';
+    success: boolean;
+    code: number;
+    error: Array<IError> | null;
   }
 }
 
