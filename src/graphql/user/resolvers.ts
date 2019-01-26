@@ -1,6 +1,6 @@
 import * as bcrypt from "bcryptjs";
 import * as yup from "yup";
-import { REDIS_USER_SESSION_PREFIX } from "../../constants";
+import { REDIS_USER_SESSION_PREFIX, REDIS_FORGOT_PASSWORD_PREFIX } from "../../constants";
 import { User } from "../../entity/User";
 import { statusMessage } from "../../i18n";
 import { sendEmailSMTP } from "../../service/email";
@@ -10,11 +10,13 @@ import { GraphQLResolver } from "../../types/graphqlUtils";
 import { parseValidationError } from "../../utils/error";
 import { createConfirmationLink, createForgotPasswordLink } from "../../utils/linkFactory";
 
-const schema = yup.object().shape({
+const registerSchema = yup.object().shape({
     firstName: yup.string().min(4).max(30),
     email: yup.string().max(255).email(),
     password: yup.string().min(5).max(255),
 });
+
+const passwordField: yup.StringSchema = yup.string().min(5).max(255);
 
 export const resolvers: GraphQLResolver = {
     Query: {
@@ -25,7 +27,7 @@ export const resolvers: GraphQLResolver = {
             const REGISTER_CODE: any = 1;
 
             try {
-                await schema.validate(args, { abortEarly: false });
+                await registerSchema.validate(args, { abortEarly: false });
             } catch (err) {
                 return {
                     success: false,
@@ -46,6 +48,7 @@ export const resolvers: GraphQLResolver = {
                 await dbUser.save();
 
                 if (process.env.NODE_ENV !== "test") {
+                    // TODO: use this with the frontend URL, to the email confirmed route
                     const link: string = await createConfirmationLink(url, dbUser.id, redis);
                     await sendEmailSMTP(dbUser.email, verifyEmailSubject(dbUser.firstName), verifyEmailTemplate(link, dbUser.firstName));
                 }
@@ -115,15 +118,49 @@ export const resolvers: GraphQLResolver = {
                 return false;
             }
 
+            // TODO: use this with the frontend URL, to the change password route
             const link: string = await createForgotPasswordLink(url, user.id, redis);
             await lockAccount(user.id, redis);
             await sendEmailSMTP(email, accountChangesSubject(user.firstName), accountChangesEmailTemplate(link, user.firstName));
 
             return true;
         },
-        changePassword: async (_, args: GQL.IChangePasswordOnMutationArguments, { redis }) => {
-            console.log(args);
-            console.log(redis);
+        changePassword: async (_, { newPassword, key }: GQL.IChangePasswordOnMutationArguments, { redis }) => {
+            const CHANGE_PASSWORD_CODE = 3;
+            const errorResponse = {
+                success: false,
+                code: CHANGE_PASSWORD_CODE,
+                error: [{
+                    path: "reset",
+                    message: statusMessage("en", CHANGE_PASSWORD_CODE, false),
+                }],
+            };
+
+            try {
+                await passwordField.validate(newPassword, { abortEarly: false });
+            } catch (err) {
+                return {
+                    success: false,
+                    code: CHANGE_PASSWORD_CODE,
+                    error: parseValidationError(err.inner),
+                };
+            }
+
+            const userId: string | null = await redis.get(`${REDIS_FORGOT_PASSWORD_PREFIX}${key}`);
+
+            if (!userId) {
+                return errorResponse;
+            }
+
+            const hashedPassword = await bcrypt.hash(newPassword, 12);
+            await User.update({ id: userId }, { password: hashedPassword });
+            await User.update({ id: userId }, { disabled: false });
+            await redis.del(`${REDIS_FORGOT_PASSWORD_PREFIX}${key}`);
+
+            return {
+                success: true,
+                code: CHANGE_PASSWORD_CODE,
+            }
         },
     },
 };
