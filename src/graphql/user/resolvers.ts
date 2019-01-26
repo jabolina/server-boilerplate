@@ -1,10 +1,10 @@
 import * as bcrypt from "bcryptjs";
 import * as yup from "yup";
-import { GraphQLResolver } from "../../types/graphqlUtils";
 import { User } from "../../entity/User";
-import { parseValidationError } from "../../utils/error";
 import { statusMessage } from "../../i18n";
 import { sendEmailSMTP } from "../../service/email";
+import { GraphQLResolver } from "../../types/graphqlUtils";
+import { parseValidationError } from "../../utils/error";
 import { createConfirmationLink } from "../../utils/registerConfirmation";
 
 const schema = yup.object().shape({
@@ -15,9 +15,14 @@ const schema = yup.object().shape({
 
 export const resolvers: GraphQLResolver = {
     Query: {
-        bye: () => {
-            return "Bye";
-        },
+        logout: async (_, __, { session }) => new Promise((resolve) => session
+            .destroy((err) => {
+                if (err) {
+                    resolve(false);
+                } else {
+                    resolve(true);
+                }
+            })),
     },
     Mutation: {
         register: async (_, args: GQL.IRegisterOnMutationArguments, { url, redis }) => {

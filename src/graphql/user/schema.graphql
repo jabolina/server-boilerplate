@@ -1,5 +1,5 @@
 type Query {
-    bye: String
+    logout: Boolean!
 }
 type Error {
     path: String!

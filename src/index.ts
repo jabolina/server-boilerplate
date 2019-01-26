@@ -1,16 +1,16 @@
-import "reflect-metadata";
-
-import { GraphQLServer } from "graphql-yoga";
 import "dotenv/config";
-
-import { create } from "./graphql";
-import { createDabataseConnection } from "./utils/typeorm";
-import { GraphQLSchema } from "graphql";
-
-import { routes } from "./routes/user";
 import { Router } from "express";
-import { redis } from "./redis";
+import { GraphQLSchema } from "graphql";
+import { GraphQLServer } from "graphql-yoga";
+import "reflect-metadata";
+import { create } from "./graphql";
 import { sessionMiddleware } from "./middleware/session";
+import { redis } from "./redis";
+import { routes } from "./routes/user";
+import { createDabataseConnection } from "./utils/typeorm";
+
+
+
 
 (async () => {
     const schema: GraphQLSchema = create();
@@ -22,10 +22,6 @@ import { sessionMiddleware } from "./middleware/session";
             session: request.session,
         })
     });
-    const cors: any = {
-        credentials: true,
-        origin: "http://localhost:3000",
-    };
 
     server.express.use(sessionMiddleware());
 
@@ -34,7 +30,10 @@ import { sessionMiddleware } from "./middleware/session";
 
     await createDabataseConnection();
     await server.start({
-        cors,
+        cors: {
+            credentials: true,
+            origin: "http://localhost:3000",
+        }
     });
 
     console.log("Server listening on port 4000");

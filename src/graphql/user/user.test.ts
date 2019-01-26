@@ -20,10 +20,10 @@ const password2 = "test-register";
 let conn: Connection;
 let userId: string;
 
-const createGlobalDatabaseConnection = (fn: Function) => createDabataseConnection().then((conn: Connection) => fn(conn));
+const createGlobalDatabaseConnection = () => new Promise((resolve) => createDabataseConnection().then((conn: Connection) => resolve(conn)));
 
-createGlobalDatabaseConnection((connection: Connection) => {
-    conn = connection;
+beforeAll(async () => {
+    conn = await createGlobalDatabaseConnection() as Connection;;
 });
 
 const closeGlobalDatabaseConnection = async () => {
@@ -56,6 +56,12 @@ const loginMutation = (e: string, p: string) => `
   }
 `;
 
+const logoutQuery = `
+  query {
+    logout
+  }
+`;
+
 describe("user-register-tests", async () => {
     test("register-user-success", async () => {
         // Insert new user in database
@@ -64,54 +70,54 @@ describe("user-register-tests", async () => {
         const happyRegisterResponse2: any = await request(GRAPHQL_HOST, registerMutation(firstName2, email2, password2));
         expect(happyRegisterResponse).toEqual({ register: { success: true, code: 1, error: null } });
         expect(happyRegisterResponse2).toEqual({ register: { success: true, code: 1, error: null } });
-    
+
         // Query user with email
         const users = await User.find({ where: { email } });
         expect(users).toHaveLength(1);
-    
+
         // Found user is the same inserted user
         const user = users[0];
         userId = user.id;
         expect(user.email).toEqual(email);
         expect(user.firstName).toEqual(firstName);
     });
-    
+
     test("register-user-duplicate-email", async () => {
         // Insert user with duplicate email
         const sadRegisterResponse = await request(GRAPHQL_HOST, registerMutation(firstName, email, password));
         expect(sadRegisterResponse).toMatchObject({ register: { success: false, code: 1, error: [{}] } });
     });
-    
+
     test("register-malformed-user-email", async () => {
         const malformedEmail = email.substr(0, 4);
-    
+
         // Insert malformed email
         const malformedEmailRegisterResponse: any = await request(GRAPHQL_HOST, registerMutation(firstName, malformedEmail, password));
         expect(malformedEmailRegisterResponse).toMatchObject({ register: { success: false, code: 1, error: [{}] } });
-    
+
         const { register } = malformedEmailRegisterResponse;
         expect(register.error).toHaveLength(1);
     });
-    
+
     test("register-malformed-user-password", async () => {
         const malformedPassword = password.substr(0, 4);
-    
+
         // Insert malformed password
         const malformedPasswordRegisterResponse: any = await request(GRAPHQL_HOST, registerMutation(firstName, email, malformedPassword));
         expect(malformedPasswordRegisterResponse).toMatchObject({ register: { success: false, code: 1, error: [{}] } });
-    
+
         const { register } = malformedPasswordRegisterResponse;
         expect(register.error).toHaveLength(1);
     });
-    
+
     test("register-malformed-user-password-and-email", async () => {
         const malformedPassword = password.substr(0, 4);
         const malformedEmail = email.substr(0, 4);
-    
+
         // Insert malformed password
         const malformedUserRegisterResponse: any = await request(GRAPHQL_HOST, registerMutation(firstName, malformedEmail, malformedPassword));
         expect(malformedUserRegisterResponse).toMatchObject({ register: { success: false, code: 1, error: [{}, {}] } });
-    
+
         const { register } = malformedUserRegisterResponse;
         expect(register.error).toHaveLength(2);
     });
@@ -144,13 +150,13 @@ describe("user-login", async () => {
 
         // Login with wrong email
         const malformedEmailLoginResponse: any = await request(GRAPHQL_HOST, loginMutation(malformedEmail, password2));
-        expect(malformedEmailLoginResponse).toMatchObject({ login: { success: false, code: 2, error: [{}] }});
+        expect(malformedEmailLoginResponse).toMatchObject({ login: { success: false, code: 2, error: [{}] } });
     });
 
     test("login-email-not-confirmed", async () => {
         // Login with an non confirmed email
         const notConfirmedLoginResponse: any = await request(GRAPHQL_HOST, loginMutation(email2, password2));
-        expect(notConfirmedLoginResponse).toMatchObject({ login: { success: false, code: 2, error: [{}] }});
+        expect(notConfirmedLoginResponse).toMatchObject({ login: { success: false, code: 2, error: [{}] } });
 
         // Confirm email for further tests
         await User.update({ email: email2 }, { confirmed: true });
@@ -161,12 +167,19 @@ describe("user-login", async () => {
 
         // Login with wrong email
         const malformedPasswordLoginResponse: any = await request(GRAPHQL_HOST, loginMutation(email2, malformedPassword));
-        expect(malformedPasswordLoginResponse).toMatchObject({ login: { success: false, code: 2, error: [{}] }});
+        expect(malformedPasswordLoginResponse).toMatchObject({ login: { success: false, code: 2, error: [{}] } });
     });
 
     test("login-successfully", async () => {
         const loginSuccessResponse: any = await request(GRAPHQL_HOST, loginMutation(email2, password2));
-        expect(loginSuccessResponse).toEqual({ login: { success: true, code: 2, error: null }});
+        expect(loginSuccessResponse).toEqual({ login: { success: true, code: 2, error: null } });
+    });
+});
+
+describe("user-logout", async () => {
+    test("have-session-to-logout", async () => {
+        const logoutResponse: any = await request(GRAPHQL_HOST, logoutQuery);
+        expect(logoutResponse.logout).toBeTruthy();
     });
 });
 
