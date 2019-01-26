@@ -56,8 +56,8 @@ const loginMutation = (e: string, p: string) => `
   }
 `;
 
-const logoutQuery = `
-  query {
+const logoutMutation = `
+  mutation {
     logout
   }
 `;
@@ -177,9 +177,9 @@ describe("user-login", async () => {
 });
 
 describe("user-logout", async () => {
-    test("have-session-to-logout", async () => {
-        const logoutResponse: any = await request(GRAPHQL_HOST, logoutQuery);
-        expect(logoutResponse.logout).toBeTruthy();
+    test("logout-session", async () => {
+        const logoutResponse: any = await request(GRAPHQL_HOST, logoutMutation);
+        expect(logoutResponse.logout).toBeDefined();
     });
 });
 

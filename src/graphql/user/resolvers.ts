@@ -1,22 +1,21 @@
 import * as bcrypt from "bcryptjs";
 import * as yup from "yup";
-import { REDIS_USER_SESSION_PREFIX, REDIS_FORGOT_PASSWORD_PREFIX } from "../../constants";
+import { REDIS_FORGOT_PASSWORD_PREFIX, REDIS_USER_SESSION_PREFIX } from "../../constants";
 import { User } from "../../entity/User";
 import { statusMessage } from "../../i18n";
 import { sendEmailSMTP } from "../../service/email";
-import { verifyEmailTemplate, accountChangesEmailTemplate, verifyEmailSubject, accountChangesSubject } from "../../service/email/template";
+import { accountChangesEmailTemplate, accountChangesSubject, verifyEmailSubject, verifyEmailTemplate } from "../../service/email/template";
 import { lockAccount, removeAllSessions } from "../../service/user";
 import { GraphQLResolver } from "../../types/graphqlUtils";
 import { parseValidationError } from "../../utils/error";
 import { createConfirmationLink, createForgotPasswordLink } from "../../utils/linkFactory";
 
+const passwordField: yup.StringSchema = yup.string().min(5).max(255);
 const registerSchema = yup.object().shape({
     firstName: yup.string().min(4).max(30),
     email: yup.string().max(255).email(),
-    password: yup.string().min(5).max(255),
+    password: passwordField,
 });
-
-const passwordField: yup.StringSchema = yup.string().min(5).max(255);
 
 export const resolvers: GraphQLResolver = {
     Query: {
@@ -153,14 +152,15 @@ export const resolvers: GraphQLResolver = {
             }
 
             const hashedPassword = await bcrypt.hash(newPassword, 12);
-            await User.update({ id: userId }, { password: hashedPassword });
-            await User.update({ id: userId }, { disabled: false });
-            await redis.del(`${REDIS_FORGOT_PASSWORD_PREFIX}${key}`);
+            const updatePromise: Promise<any> = User.update({ id: userId }, { password: hashedPassword, disabled: false });
+            const deleteKeyPromise: Promise<any> = redis.del(`${REDIS_FORGOT_PASSWORD_PREFIX}${key}`);
+
+            await Promise.all([updatePromise, deleteKeyPromise]);
 
             return {
                 success: true,
                 code: CHANGE_PASSWORD_CODE,
-            }
+            };
         },
     },
 };
