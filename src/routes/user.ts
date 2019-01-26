@@ -6,9 +6,10 @@ const router: Router = Router();
 
 export const routes = (redis: Redis) => {
     router.get("/confirm/:id", async (req: Request, res: Response) => {
-        console.log("Received link confirmation");
         const { id } = req.params;
         const userId: string | null = await redis.get(id);
+
+        console.log(`Received link confirmation with id: [${id}]`);
 
         if (userId) {
             await User.update({ id: userId }, { confirmed: true });

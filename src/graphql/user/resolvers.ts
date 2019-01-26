@@ -42,13 +42,12 @@ export const resolvers: GraphQLResolver = {
                     password: hashedPassword,
                 });
 
+                await dbUser.save();
+
                 if (process.env.NODE_ENV !== "test") {
                     const link: string = await createConfirmationLink(url, dbUser.id, redis);
-                    console.log(link);
                     await sendEmailSMTP(dbUser.email, link, dbUser.firstName);
                 }
-
-                await dbUser.save();
 
                 return {
                     success: true,
@@ -65,6 +64,32 @@ export const resolvers: GraphQLResolver = {
                     }],
                 };
             }
+        },
+        login: async (_, { email, password }: GQL.ILoginOnMutationArguments) => {
+            const LOGIN_CODE = 2;
+            const errorMessage: any = {
+                success: false,
+                code: 2,
+                error: [{
+                    path: "login",
+                    message: statusMessage("en", LOGIN_CODE, false),
+                }],
+            };
+            const user: User | undefined = await User.findOne({ where: { email } });
+
+            if (!user) {
+                return errorMessage;
+            }
+
+            const isPasswordValid: boolean = await bcrypt.compare(password, user.password);
+
+            if (!isPasswordValid || !user.confirmed) {
+                return errorMessage;
+            }
+
+            return {
+                success: true
+            };
         },
     },
 };

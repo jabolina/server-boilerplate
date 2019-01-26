@@ -10,6 +10,12 @@ type RegisterResponse {
     error: [Error!]
     code: Int!
 }
+type LoginResponse {
+    success: Boolean!
+    error: [Error!]
+    code: Int!
+}
 type Mutation {
     register(firstName: String!, email: String!, password: String!): RegisterResponse!
+    login(email: String!, password: String!): LoginResponse!
 }

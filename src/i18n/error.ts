@@ -20,6 +20,12 @@ const messages: any = {
         "Error durante el registro",
         "Erreur lors de l'inscription",
     ]),
+    2: messageFactory([
+        "Login inváliado",
+        "Invalid login",
+        "Inicio de sesión no válido",
+        "Connexion invalide"
+    ]),
 }
 
 export const errorMessage = (code: any) => {

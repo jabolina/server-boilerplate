@@ -20,6 +20,12 @@ const messages: any = {
         "Éxito durante el registro",
         "Succès lors de l'inscription",
     ]),
+    2: messageFactory([
+        "Logado com sucesso",
+        "Successfully logged in",
+        "Ha iniciado sesión correctamente",
+        "Connecté avec succès",
+    ]),
 }
 
 export const successMessage = (code: any) => {
