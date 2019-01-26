@@ -6,6 +6,7 @@ import { sendEmailSMTP } from "../../service/email";
 import { GraphQLResolver } from "../../types/graphqlUtils";
 import { parseValidationError } from "../../utils/error";
 import { createConfirmationLink } from "../../utils/registerConfirmation";
+import { REDIS_USER_SESSION_PREFIX, REDIS_SESSION_PREFIX } from "../../constants";
 
 const schema = yup.object().shape({
     firstName: yup.string().min(4).max(30),
@@ -15,14 +16,7 @@ const schema = yup.object().shape({
 
 export const resolvers: GraphQLResolver = {
     Query: {
-        logout: async (_, __, { session }) => new Promise((resolve) => session
-            .destroy((err) => {
-                if (err) {
-                    resolve(false);
-                } else {
-                    resolve(true);
-                }
-            })),
+        dummy: () => "yep",
     },
     Mutation: {
         register: async (_, args: GQL.IRegisterOnMutationArguments, { url, redis }) => {
@@ -69,7 +63,7 @@ export const resolvers: GraphQLResolver = {
                 };
             }
         },
-        login: async (_, { email, password }: GQL.ILoginOnMutationArguments, { session }) => {
+        login: async (_, { email, password }: GQL.ILoginOnMutationArguments, { session, redis, request }) => {
             const LOGIN_CODE = 2;
             const errorMessage: any = {
                 success: false,
@@ -93,10 +87,26 @@ export const resolvers: GraphQLResolver = {
 
             session.userId = user.id;
 
+            if (request.sessionID) {
+                await redis.lpush(`${REDIS_USER_SESSION_PREFIX}${user.id}`, request.sessionID);
+            }
+
             return {
                 success: true,
                 code: LOGIN_CODE,
             };
+        },
+        logout: async (_, __, { session, redis }) => {
+            const { userId } = session;
+
+            if (userId) {
+                const allSessionIds: any[] = await redis.lrange(`${REDIS_USER_SESSION_PREFIX}${userId}`, 0, -1);
+                
+                allSessionIds.forEach(async (sessionId) => await redis.del(`${REDIS_SESSION_PREFIX}${sessionId}`));
+                return true;
+            }
+
+            return false;
         },
     },
 };

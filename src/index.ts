@@ -20,7 +20,8 @@ import { createDabataseConnection } from "./utils/typeorm";
             redis,
             url: `${request.protocol}://${request.get("host")}`,
             session: request.session,
-        })
+            request,
+        }),
     });
 
     server.express.use(sessionMiddleware());

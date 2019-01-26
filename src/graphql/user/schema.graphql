@@ -1,5 +1,5 @@
 type Query {
-    logout: Boolean!
+    dummy: String
 }
 type Error {
     path: String!
@@ -18,4 +18,5 @@ type LoginResponse {
 type Mutation {
     register(firstName: String!, email: String!, password: String!): RegisterResponse!
     login(email: String!, password: String!): LoginResponse!
+    logout: Boolean!
 }
