@@ -10,6 +10,7 @@ import { GraphQLSchema } from "graphql";
 import { routes } from "./routes/user";
 import { Router } from "express";
 import { redis } from "./redis";
+import { sessionMiddleware } from "./middleware/session";
 
 (async () => {
     const schema: GraphQLSchema = create();
@@ -18,13 +19,23 @@ import { redis } from "./redis";
         context: ({ request }: any) => ({
             redis,
             url: `${request.protocol}://${request.get("host")}`,
+            session: request.session,
         })
     });
+    const cors: any = {
+        credentials: true,
+        origin: "http://localhost:3000",
+    };
+
+    server.express.use(sessionMiddleware());
 
     const router: Router = routes(redis);
     server.express.use("/", router);
+
     await createDabataseConnection();
-    await server.start();
+    await server.start({
+        cors,
+    });
 
     console.log("Server listening on port 4000");
 })();

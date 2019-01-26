@@ -64,7 +64,7 @@ export const resolvers: GraphQLResolver = {
                 };
             }
         },
-        login: async (_, { email, password }: GQL.ILoginOnMutationArguments) => {
+        login: async (_, { email, password }: GQL.ILoginOnMutationArguments, { session }) => {
             const LOGIN_CODE = 2;
             const errorMessage: any = {
                 success: false,
@@ -85,6 +85,8 @@ export const resolvers: GraphQLResolver = {
             if (!isPasswordValid || !user.confirmed) {
                 return errorMessage;
             }
+
+            session.userId = user.id;
 
             return {
                 success: true,
