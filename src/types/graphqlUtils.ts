@@ -4,12 +4,24 @@ export interface Session {
     userId?: string;
 }
 
+export type GraphQLContext = {
+    url: string,
+    redis: Redis,
+    session: Session,
+};
+
+export type Resolver = (parent: any, args: any, context: GraphQLContext, info: any) => any;
+
+export type GraphQLMiddleware = (
+    resolver: Resolver,
+    parent: any,
+    args: any,
+    context: GraphQLContext,
+    info: any
+) => any;
+
 export interface GraphQLResolver {
     [key: string]: {
-        [key: string]: (parent: any, args: any, context: {
-            url: string,
-            redis: Redis,
-            session: Session,
-        }, info: any) => any
+        [key: string]: Resolver
     }
 };
