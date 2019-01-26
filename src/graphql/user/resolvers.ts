@@ -54,7 +54,6 @@ export const resolvers: GraphQLResolver = {
                     code: REGISTER_CODE,
                 };
             } catch (err) {
-                console.log(err);
                 return {
                     success: false,
                     code: REGISTER_CODE,
@@ -88,7 +87,8 @@ export const resolvers: GraphQLResolver = {
             }
 
             return {
-                success: true
+                success: true,
+                code: LOGIN_CODE,
             };
         },
     },
