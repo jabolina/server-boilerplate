@@ -12,7 +12,7 @@ const messageFactory = (messages: string[]) => {
         country: "fr",
         message: messages[3],
     }];
-}
+};
 const messages: any = {
     1: messageFactory([
         "Erro durante cadastro",

@@ -1,6 +1,6 @@
 import * as bcrypt from "bcryptjs";
 import * as yup from "yup";
-import { REDIS_FORGOT_PASSWORD_PREFIX, REDIS_USER_SESSION_PREFIX } from "../../constants";
+import { REDIS_FORGOT_PASSWORD_PREFIX, REDIS_USER_SESSION_PREFIX, DISABLE_ACCOUNT_CODE, CHANGE_PASSWORD_CODE, LOGIN_CODE, REGISTER_CODE } from "../../constants";
 import { User } from "../../entity/User";
 import { statusMessage } from "../../i18n";
 import { sendEmailSMTP } from "../../service/email";
@@ -25,8 +25,6 @@ export const resolvers: GraphQLResolver = {
     },
     Mutation: {
         register: async (_, args: GQL.IRegisterOnMutationArguments, { url, redis }) => {
-            const REGISTER_CODE: any = 1;
-
             try {
                 await registerSchema.validate(args, { abortEarly: false });
             } catch (err) {
@@ -69,8 +67,7 @@ export const resolvers: GraphQLResolver = {
                 };
             }
         },
-        login: async (_, { email, password }: GQL.ILoginOnMutationArguments, { session, redis, request }) => {
-            const LOGIN_CODE = 2;
+        login: async (_, { email, password }: GQL.ILoginOnMutationArguments, { session, redis, request }) => {  
             const errorMessage: any = {
                 success: false,
                 code: 2,
@@ -127,7 +124,6 @@ export const resolvers: GraphQLResolver = {
             return true;
         },
         changePassword: async (_, { newPassword, key }: GQL.IChangePasswordOnMutationArguments, { redis }) => {
-            const CHANGE_PASSWORD_CODE = 3;
             const errorResponse = {
                 success: false,
                 code: CHANGE_PASSWORD_CODE,
@@ -166,7 +162,6 @@ export const resolvers: GraphQLResolver = {
         },
         disableAccount: createGraphQLMiddleware(graphql,
             async (_, __, { redis, userId }) => {
-                const DISABLE_ACCOUNT_CODE = 4;
                 const user: User | undefined = await User.findOne({ where: { id: userId }});
 
                 if (!user) {
