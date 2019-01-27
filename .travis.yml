@@ -1,6 +1,7 @@
 language: nodejs
 
 before_install:
+    - npm install npm -g
     - npm uninstall yarn
     - npm install yarn -g
       
