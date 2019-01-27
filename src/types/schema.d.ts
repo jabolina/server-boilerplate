@@ -39,6 +39,7 @@ declare namespace GQL {
     logout: boolean;
     sendForgotPasswordEmail: boolean;
     changePassword: IChangePasswordResponse;
+    disableAccount: IDisableAccountResponse;
   }
 
   interface IRegisterOnMutationArguments {
@@ -59,6 +60,10 @@ declare namespace GQL {
   interface IChangePasswordOnMutationArguments {
     newPassword: string;
     key: string;
+  }
+
+  interface IDisableAccountOnMutationArguments {
+    userId: string;
   }
 
   interface IRegisterResponse {
@@ -83,6 +88,13 @@ declare namespace GQL {
 
   interface IChangePasswordResponse {
     __typename: 'ChangePasswordResponse';
+    success: boolean;
+    code: number;
+    error: Array<IError> | null;
+  }
+
+  interface IDisableAccountResponse {
+    __typename: 'DisableAccountResponse';
     success: boolean;
     code: number;
     error: Array<IError> | null;

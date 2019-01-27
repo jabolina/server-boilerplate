@@ -20,10 +20,16 @@ type ChangePasswordResponse {
     code: Int!
     error: [Error!]
 }
+type DisableAccountResponse {
+    success: Boolean!
+    code: Int!
+    error: [Error!]
+}
 type Mutation {
     register(firstName: String!, email: String!, password: String!): RegisterResponse!
     login(email: String!, password: String!): LoginResponse!
     logout: Boolean!
     sendForgotPasswordEmail(email: String!): Boolean!
     changePassword(newPassword: String!, key: String!): ChangePasswordResponse!
+    disableAccount: DisableAccountResponse!
 }

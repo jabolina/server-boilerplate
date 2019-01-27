@@ -10,6 +10,7 @@ export interface GraphQLContext {
     redis: Redis,
     session: Session,
     request: Request,
+    userId?: string;
 };
 
 export type Resolver = (parent: any, args: any, context: GraphQLContext, info: any) => any;

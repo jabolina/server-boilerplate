@@ -9,10 +9,11 @@ export default async (
     args: any,
     context: any,
     info: any) => {
-        if (!context.session || !context.session.userId) {
-            return null;
+
+        if (context.session && context.session.sessionId) {
+            const userId: string = await context.redis.get(context.session.sessionId);
+            context.userId = userId;
         }
-        
-        const result: any = await resolver(parent, args, context, info);
-        return result;
-};
+
+        return await resolver(parent, args, context, info);
+    }

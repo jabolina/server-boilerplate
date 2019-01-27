@@ -31,7 +31,13 @@ const messages: any = {
         "Success in password reset",
         "Éxito en restablecer la contraseña",
         "Réinitialisation du mot de passe",
-    ])
+    ]),
+    4: messageFactory([
+        "Conta desativada com sucesso",
+        "Account disabled successfully",
+        "Cuenta deshabilitada exitosamente",
+        "Compte désactivé avec succès",
+    ]),
 }
 
 export const successMessage = (code: any) => {

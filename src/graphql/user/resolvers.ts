@@ -9,6 +9,8 @@ import { lockAccount, removeAllSessions } from "../../service/user";
 import { GraphQLResolver } from "../../types/graphqlUtils";
 import { parseValidationError } from "../../utils/error";
 import { createConfirmationLink, createForgotPasswordLink } from "../../utils/linkFactory";
+import { createGraphQLMiddleware } from "../../middleware";
+import graphql from "../../middleware/graphql";
 
 const passwordField: yup.StringSchema = yup.string().min(5).max(255);
 const registerSchema = yup.object().shape({
@@ -162,5 +164,28 @@ export const resolvers: GraphQLResolver = {
                 code: CHANGE_PASSWORD_CODE,
             };
         },
+        disableAccount: createGraphQLMiddleware(graphql,
+            async (_, __, { redis, userId }) => {
+                const DISABLE_ACCOUNT_CODE = 4;
+                const user: User | undefined = await User.findOne({ where: { id: userId }});
+
+                if (!user) {
+                    return {
+                        success: false,
+                        code: DISABLE_ACCOUNT_CODE,
+                        error: [{
+                            path: "disable",
+                            message: statusMessage("en", DISABLE_ACCOUNT_CODE, false),
+                        }],
+                    };
+                }
+
+                await lockAccount(user.id, redis);
+
+                return {
+                    success: true,
+                    code: DISABLE_ACCOUNT_CODE,
+                };
+        }),
     },
 };

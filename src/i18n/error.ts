@@ -32,6 +32,12 @@ const messages: any = {
         "Error al restablecer la contraseña",
         "Erreur lors de la réinitialisation du mot de passe",
     ]),
+    4: messageFactory([
+        "Erro ao desativar a conta",
+        "Error while disabling account",
+        "Error al desactivar la cuenta",
+        "Erreur lors de la désactivation du compte",
+    ]),
 }
 
 export const errorMessage = (code: any) => {
